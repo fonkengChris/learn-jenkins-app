@@ -31,10 +31,21 @@ pipeline {
             
             steps {
                 sh '''
-                   npm install -g serve
-                   node_modules/.bin/serve -s build &
-                   sleep 10
-                   npx playwright test             
+                    npm install serve --save-dev
+                    npx serve -s build &
+                    echo "Waiting for server to start..."
+                    # Wait for the server to be ready
+                    for i in $(seq 1 30); do
+                        if curl -s http://localhost:3000 >/dev/null; then
+                            echo "Server is up!"
+                            break
+                        fi
+                        echo "Waiting... ($i/30)"
+                        sleep 1
+                    done
+                    
+                    # Run the tests
+                    npx playwright test
                 '''
             }
         }
