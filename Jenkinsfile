@@ -15,8 +15,8 @@ pipeline {
                     node --version
                     npm --version
                     # Clean node_modules to avoid permission issues
-                    rm -rf node_modules
-                    npm ci
+                    sudo rm -rf node_modules || rm -rf node_modules || true
+                    npm install
                     npm run build
                     ls -la
                 '''
@@ -34,8 +34,8 @@ pipeline {
             steps {
                 sh '''
                     # Clean node_modules to avoid permission issues
-                    rm -rf node_modules
-                    npm ci
+                    sudo rm -rf node_modules || rm -rf node_modules || true
+                    npm install
                     npm test -- --watchAll=false --testResultsProcessor="jest-junit"
                 '''
             }
@@ -52,8 +52,8 @@ pipeline {
             steps {
                 sh '''
                     # Clean node_modules to avoid permission issues
-                    rm -rf node_modules
-                    npm ci
+                    sudo rm -rf node_modules || rm -rf node_modules || true
+                    npm install
                     npm install serve
                     node_modules/.bin/serve -s build &
                     sleep 10
