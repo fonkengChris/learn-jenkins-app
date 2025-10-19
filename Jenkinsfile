@@ -12,6 +12,8 @@ pipeline {
             steps {
                 sh '''
                     ls -la
+                    # Clean up any existing build artifacts and node_modules
+                    rm -rf node_modules build test-results playwright-report || true
                     node --version
                     npm --version
                     npm ci
