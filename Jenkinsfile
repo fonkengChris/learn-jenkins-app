@@ -14,9 +14,7 @@ pipeline {
                     ls -la
                     node --version
                     npm --version
-                    # Fix ownership of all files to current user
-                    chown -R $(id -u):$(id -g) . || true
-                    npm install
+                    npm ci
                     npm run build
                     ls -la
                 '''
@@ -33,9 +31,7 @@ pipeline {
 
             steps {
                 sh '''
-                    # Fix ownership of all files to current user
-                    chown -R $(id -u):$(id -g) . || true
-                    npm install
+                    npm ci
                     npm test -- --watchAll=false --testResultsProcessor="jest-junit"
                 '''
             }
@@ -51,9 +47,7 @@ pipeline {
 
             steps {
                 sh '''
-                    # Fix ownership of all files to current user
-                    chown -R $(id -u):$(id -g) . || true
-                    npm install
+                    npm ci
                     npm install serve
                     node_modules/.bin/serve -s build &
                     sleep 10
