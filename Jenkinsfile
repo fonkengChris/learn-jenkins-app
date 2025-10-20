@@ -12,8 +12,6 @@ pipeline {
             steps {
                 sh '''
                     ls -la
-                    # Clean up any existing build artifacts and node_modules
-                    rm -rf node_modules build test-results playwright-report || true
                     node --version
                     npm --version
                     npm ci
@@ -34,7 +32,7 @@ pipeline {
             steps {
                 sh '''
                     npm ci
-                    npm test -- --watchAll=false --testResultsProcessor="jest-junit"
+                    npm test
                 '''
             }
         }
@@ -49,7 +47,6 @@ pipeline {
 
             steps {
                 sh '''
-                    npm ci
                     npm install serve
                     node_modules/.bin/serve -s build &
                     sleep 10
