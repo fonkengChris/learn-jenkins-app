@@ -1,0 +1,16 @@
+def jobName = "learn-jenkins-app"  // Change this to the job name you want to clean up
+
+def job = Jenkins.instance.getItemByFullName(jobName)
+if (job == null) {
+    println "❌ Job not found: ${jobName}"
+    return
+}
+
+def workspaceDir = new File(Jenkins.instance.getRootDir(), "workspace/${job.name}")
+if (workspaceDir.exists()) {
+    println "🧹 Deleting workspace: ${workspaceDir.absolutePath}"
+    workspaceDir.deleteDir()
+    println "✅ Workspace deleted."
+} else {
+    println "⚠️ Workspace not found at ${workspaceDir.absolutePath}"
+}
