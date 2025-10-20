@@ -1,21 +1,11 @@
-
 pipeline {
     agent any
 
     stages {
-        stage('Cleanup') {
-            steps {
-                // Force-clean the workspace before each build
-                deleteDir()
-            }
-        }
-
         stage('Build') {
             agent {
                 docker {
                     image 'node:18-alpine'
-                    // Run Docker as the Jenkins user, not root
-                    args '-u $(id -u):$(id -g)'
                     reuseNode true
                 }
             }
@@ -35,10 +25,10 @@ pipeline {
             agent {
                 docker {
                     image 'node:18-alpine'
-                    args '-u $(id -u):$(id -g)'
                     reuseNode true
                 }
             }
+
             steps {
                 sh '''
                     npm ci
@@ -51,10 +41,10 @@ pipeline {
             agent {
                 docker {
                     image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
-                    args '-u $(id -u):$(id -g)'
                     reuseNode true
                 }
             }
+
             steps {
                 sh '''
                     npm install serve
@@ -68,9 +58,7 @@ pipeline {
 
     post {
         always {
-            // Clean up test results and workspace safely
             junit 'test-results/junit.xml'
-            deleteDir()
         }
     }
 }
