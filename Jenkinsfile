@@ -96,6 +96,16 @@ pipeline {
             }
         }
 
+        stage('Approval'){
+            input {
+                message "Do you want to deploy to production?"
+                ok "Yes, I am sure"
+                submitter "jenkins"
+                parameters {
+                    string(name: 'ENV', defaultValue: 'production', description: 'Environment to deploy to')
+                }
+            }
+        }
 
          stage('Deploy prod') {
             agent {
