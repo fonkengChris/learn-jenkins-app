@@ -98,15 +98,8 @@ pipeline {
 
         stage('Approval'){
             steps {
-                script {
-                    input(
-                        message: 'Do you want to deploy to production?',
-                        ok: 'Yes, I am sure',
-                        submitter: 'jenkins',
-                        parameters: [
-                            string(name: 'ENV', defaultValue: 'production', description: 'Environment to deploy to')
-                        ]
-                    )
+                timeout(time: 10, unit: 'MINUTES') {
+                    input message: 'Do you wish to deploy to production?', ok: 'Yes I\'m sure!'
                 }
             }
         }
