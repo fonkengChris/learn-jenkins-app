@@ -21,7 +21,7 @@ pipeline {
                     node --version
                     npm --version
                     npm ci
-                    npm run build
+                    REACT_APP_VERSION=$REACT_APP_VERSION npm run build
                     ls -la
                 '''
             }
@@ -141,7 +141,7 @@ pipeline {
                     node_modules/.bin/netlify status
                     node_modules/.bin/netlify deploy --prod --dir=build
                     echo "Deployment complete"
-                    npx playwright test --reporter=html
+                    REACT_APP_VERSION=$REACT_APP_VERSION npx playwright test --reporter=html
                 '''
             }        
 
