@@ -18,7 +18,8 @@ test('has Jenkins in the body', async ({ page }) => {
 test('has expected app version', async ({ page }) => {
   await page.goto('/');
 
-  const expectedAppVersion = process.env.REACT_APP_VERSION ? process.env.REACT_APP_VERSION : '1';
+  const { env } = require('process');
+  const expectedAppVersion = env.REACT_APP_VERSION ? env.REACT_APP_VERSION : '1';
 
   console.log(expectedAppVersion);
 
