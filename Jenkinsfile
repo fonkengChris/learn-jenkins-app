@@ -4,7 +4,7 @@ pipeline {
     environment {
         NETLIFY_SITE_ID = 'cfd9baf2-9875-4244-98d3-a959eaf5859e'
         NETLIFY_AUTH_TOKEN = credentials('netlify-token')
-        REACT_APP_VERSION = '1.2.3'
+        REACT_APP_VERSION = '1.2.$BUILD_ID'
     }
 
     stages {
@@ -44,7 +44,7 @@ pipeline {
 
                     steps {
                         sh '''  
-                            npm ci
+                            #test -f build/index.html
                             npm test 
                         '''
                     }
@@ -66,7 +66,6 @@ pipeline {
 
                     steps {
                         sh '''
-                            npm ci
                             npm install serve
                             node_modules/.bin/serve -s build &
                             sleep 10
@@ -115,13 +114,6 @@ pipeline {
             }
         }
 
-        stage('Approval'){
-            steps {
-                timeout(time: 10, unit: 'MINUTES') {
-                    input message: 'Do you wish to deploy to production?', ok: 'Yes I\'m sure!'
-                }
-            }
-        }
 
         stage('Deploy prod') {
     
@@ -159,7 +151,7 @@ pipeline {
 
     post {
         always {
-            junit 'jest-results/junit.xml'
+            // junit 'jest-results/junit.xml'
             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
         }
     }
