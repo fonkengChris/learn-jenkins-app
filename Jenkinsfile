@@ -22,6 +22,7 @@ pipeline {
                     node --version
                     npm --version
                     npm ci
+                    REACT_APP_VERSION=$REACT_APP_VERSION npm run build
                     ls -la
                 '''
             }
