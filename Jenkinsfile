@@ -135,7 +135,7 @@ pipeline {
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
                     netlify status
                     netlify deploy --prod --dir=build 
-                    sleep 10
+                    sleep 60
                     npx playwright test --reporter=html
                 '''
             }        
