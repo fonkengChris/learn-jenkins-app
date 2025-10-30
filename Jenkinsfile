@@ -22,7 +22,6 @@ pipeline {
                     node --version
                     npm --version
                     npm ci
-                    REACT_APP_VERSION=$REACT_APP_VERSION npm run build
                     ls -la
                 '''
             }
@@ -97,7 +96,7 @@ pipeline {
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
                     netlify status
                     netlify deploy --json --dir=build > deploy-output.json
-                    CI_ENVIRONMENT_URL=$(node-jq -r '.deploy_url' deploy-output.json) 
+                    CI_ENVIRONMENT_URL=$(jq -r '.deploy_url' deploy-output.json) 
                     npx playwright test --reporter=html
                 '''
             }
@@ -130,7 +129,7 @@ pipeline {
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
                     netlify status
                     netlify deploy --prod --dir=build --json > deploy-output.json
-                    CI_ENVIRONMENT_URL=$(node-jq -r '.deploy_url // .url' deploy-output.json)
+                    CI_ENVIRONMENT_URL=$(jq -r '.deploy_url // .url' deploy-output.json)
                     npx playwright test --reporter=html
                 '''
             }        
