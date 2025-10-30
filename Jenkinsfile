@@ -59,15 +59,14 @@ pipeline {
                 stage('E2E') {
                     agent {
                         docker {
-                            image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                            image 'my-playwright'
                             reuseNode true
                         }
                     }
 
                     steps {
                         sh '''
-                            npm install serve
-                            node_modules/.bin/serve -s build &
+                            serve -s build &
                             sleep 10
                             npx playwright test --reporter=html
                         '''
@@ -136,7 +135,6 @@ pipeline {
                     netlify status
                     netlify deploy --prod --dir=build --json > deploy-output.json
                     CI_ENVIRONMENT_URL=$(node-jq -r '.deploy_url // .url' deploy-output.json)
-                    echo "Testing: $CI_ENVIRONMENT_URL"
                     npx playwright test --reporter=html
                 '''
             }        
