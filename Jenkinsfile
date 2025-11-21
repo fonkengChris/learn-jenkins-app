@@ -48,6 +48,7 @@ pipeline {
                         yum install jq -y
                         LATEST_TD_REVISION=$(aws ecs register-task-definition --cli-input-json file://aws/task-definition-prod.json | jq -r '.taskDefinition.revision')
                         aws ecs update-service --cluster amused-butterfly-knmigq --service LearnJenkinsApp-TaskDefinition-Prod-service-a82i56u7 --task-definition LearnJenkinsApp-TaskDefinition-Prod:$LATEST_TD_REVISION
+                        aws ecs wait services-stable --cluster amused-butterfly-knmigq --services LearnJenkinsApp-TaskDefinition-Prod-service-a82i56u7
                     '''
                 }
                 
