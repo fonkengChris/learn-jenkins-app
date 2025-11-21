@@ -5,6 +5,7 @@ pipeline {
         // NETLIFY_SITE_ID = 'cfd9baf2-9875-4244-98d3-a959eaf5859e'
         // NETLIFY_AUTH_TOKEN = credentials('netlify-token')
         REACT_APP_VERSION = "1.2.${BUILD_ID}"
+        AWS_DEFAULT_REGION = 'eu-west-2'
     }
 
     stages {
@@ -44,7 +45,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'my-aws', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                     sh '''
                         aws --version
-                        aws ecs register-task-definition --cli-input-json file://aws/task-definition-prod.json --region eu-west-2
+                        aws ecs register-task-definition --cli-input-json file://aws/task-definition-prod.json
+                        aws ecs update-service --cluster amused-butterfly-knmigq --service LearnJenkinsApp-TaskDefinition-Prod-service-a82i56u7 --task-definition LearnJenkinsApp-TaskDefinition-Prod:2
                     '''
                 }
                 
